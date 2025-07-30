@@ -41,14 +41,39 @@ class data:
     def devolver():
         ... 
 
+
+
+class Livro:
+    def __init__(self, livro, dataemprestimo = '', datadevolucao = ''):
+        self.livro = livro
+        self.dataemprestimo = dataemprestimo
+        self.datadevolucao = datadevolucao
+
+
+    def emprestimo(self,):
+        emprestimo = datetime.now()
+        self.dataemprestimo = emprestimo
+        
+
+         
+    def devolucao():
+        ...
+
+    
+teste = Livro("Livro")
+teste.emprestimo()
+print(teste.__dict__)
+
+
+
 #Classe usuário, definido os atributos e os metodos de pegar, devolver livro e exibir histórico de livro.
 class Usuarios:
-    def __init__(self, nome, id, historico = [] ):
+    def __init__(self, nome, id, historico = '' ):
         self.nome = nome
         self.id = id
-        self.historico = historico
+        self.historico = historico()
         self.data = data()
-    def pegarLivro(self,hisLivro):
+    def emprestarLivro(self,hisLivro):
         self.historico.append(hisLivro)
         
     def devolverLivro(self,hisLivro):
@@ -61,13 +86,17 @@ class Usuarios:
             cont += 1
             print(f'{cont} - {item}')
 
+    def emprestimo(self):
+        ...
+
+"""
 usuario1 = Usuarios('Matheus', 123,  )
-usuario1.pegarLivro('Chapeu vermelho')
-usuario1.pegarLivro('Ocho')
-usuario1.pegarLivro('não identificado')
+usuario1.emprestarLivro('Chapeu vermelho')
+usuario1.emprestarLivro('Ocho')
+usuario1.emprestarLivro('não identificado')
+"""
 
 #usuario1.devolverLivro('Chapeu vermelho')
-usuario1.exibir()
+#usuario1.exibir()
 
 
-    
