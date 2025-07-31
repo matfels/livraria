@@ -43,12 +43,59 @@ class data:
 
 
 
+
+#Classe usuário, definido os atributos e os metodos de pegar, devolver livro e exibir histórico de livro.
+class Usuarios:
+    def __init__(self, nome, id, historico = []):
+        self.nome = nome
+        self.id = id
+        self.historico = historico
+
+    def devolverLivro(self,hisLivro):
+        self.historico.remove(hisLivro)
+        
+    def exibir(self):
+        cont = 0
+        print("Historico:")
+        for item in self.historico:
+            cont += 1
+            print(f'{cont} - {item}')
+
+    def emprestimo(self,hisLivro):
+        emprestimo = datetime.now()
+        self.historico.append({hisLivro, emprestimo})
+        
+
+
+
+   
+
+livro1 = Livros('Chapeu vermelho', 'Chico', 2500, 'Indisponivel') # OBJETO LIVRO
+livro2 = Livros('asd vermelho', 'asd', 250, 'Indisponivel') # OBJETO LIVRO
+livro3 = Livros('Chgrsapeu vermelho', 'gdf', 2400, 'Indisponivel') # OBJETO LIVRO
+livro4 = Livros('Chapegdfgdu vermelho', 'gfd', 2030, 'Indisponivel') # OBJETO LIVRO
+
+
+
+
+usuario1 = Usuarios('Matheus', 123)                              # OBJETO USUARIO
+usuario1.emprestimo(livro1)
+usuario1.emprestimo(livro2)
+usuario1.emprestimo(livro3)
+usuario1.emprestimo(livro4)
+usuario1.exibir()
+#print(usuario1.__dict__)
+
+
+
+
+"""
 class Livro:
-    def __init__(self, livro, dataemprestimo = '', datadevolucao = ''):
+    def __init__(self, livro,usuariso, dataemprestimo = '', datadevolucao = ''):
         self.livro = livro
         self.dataemprestimo = dataemprestimo
         self.datadevolucao = datadevolucao
-
+        self.usuario = Usuarios()
 
     def emprestimo(self,):
         emprestimo = datetime.now()
@@ -63,40 +110,8 @@ class Livro:
 teste = Livro("Livro")
 teste.emprestimo()
 print(teste.__dict__)
-
-
-
-#Classe usuário, definido os atributos e os metodos de pegar, devolver livro e exibir histórico de livro.
-class Usuarios:
-    def __init__(self, nome, id, historico = '' ):
-        self.nome = nome
-        self.id = id
-        self.historico = historico()
-        self.data = data()
-    def emprestarLivro(self,hisLivro):
-        self.historico.append(hisLivro)
-        
-    def devolverLivro(self,hisLivro):
-        self.historico.remove(hisLivro)
-        
-    def exibir(self):
-        cont = 0
-        print("Historico:")
-        for item in self.historico:
-            cont += 1
-            print(f'{cont} - {item}')
-
-    def emprestimo(self):
-        ...
-
 """
-usuario1 = Usuarios('Matheus', 123,  )
-usuario1.emprestarLivro('Chapeu vermelho')
-usuario1.emprestarLivro('Ocho')
-usuario1.emprestarLivro('não identificado')
-"""
-
 #usuario1.devolverLivro('Chapeu vermelho')
-#usuario1.exibir()
+
 
 
