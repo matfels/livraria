@@ -1,117 +1,104 @@
-from datetime import datetime
-#classe livro, definido os atributos e metodos permitem ver disponibilidade, status e exibir informações do livro.
-class Livros:
-    def __init__(self, titulo, autor, npagina, status):
-        self.titulo = titulo
-        self.autor = autor
-        self.npagina = npagina
-        self.status = status
+#Básicamente faz com que um objeto nao seja criado diretamente da classe mãe e sim das Heranças
+from abc import ABC, abstractclassmethod
+
+class Imovel(ABC):
+    def __init__(self, nome, uf, valor, endereco = '', area = ''):
+        self._nome = nome #1 anderline protegido, dois anderline atributos privados.
+        self.uf = uf
+        self.valor = valor
+        self.endereco = endereco
+        self.area = area
 
 
-    def verDisp(self):
-        match self.status:
-            case 'Disponivel':
-                print('Livro esta Disponivel')
-            case 'Indisponivel':
-                print('Livro esta Indisponivel')
-            case other:
-                print('Erro no status')
-                
+#=================== Encapsulamento no python =======================
 
-    def statuss(self, status1):
-        self.status = status1
+    @property  
+    def nome(self): #get
+        return self._nome
 
-    def exibir(self):
+    @nome.setter #set -  Utiliza metodos como atributos
+    def nome(self, nome):
+        self._nome = nome
+    
+#=================== Encapsulamento no python =======================
+
+
+
+
+
+#==================== Forma convencional, utilizado nas outras liguagens ===============================
+#    def getNome(self):       #metodo para pegar o valor do nome
+#       return self.nome
+
+#    def setNome(self, nome):  #metodo para setar o nome
+#        self.nome = nome
+#==================== Forma convencional, utilizado nas outras liguagens ===============================
+
+
+
+    def detalhar(self):            
         print(self.__dict__)
+        
     
-'''
-livro1 = Livros('Chapeu vermelho', 'Chico', 200, 'Indisponivel')
-livro1.exibir()
-livro1.verDisp()
-livro1.statuss('Disponivel')
-'''
-
-class data:
-    def __init__(self, pegar1 = '', devolver1 = ''):
-        self.pegar1 = pegar1
-        self.devolver1 = devolver1
-        
-    def pegar():
-        ...
-    def devolver():
-        ... 
-
-
-
-
-#Classe usuário, definido os atributos e os metodos de pegar, devolver livro e exibir histórico de livro.
-class Usuarios:
-    def __init__(self, nome, id, historico = []):
-        self.nome = nome
-        self.id = id
-        self.historico = historico
-
-    def devolverLivro(self,hisLivro):
-        self.historico.remove(hisLivro)
-        
-    def exibir(self):
-        cont = 0
-        print("Historico:")
-        for item in self.historico:
-            cont += 1
-            print(f'{cont} - {item}')
-
-    def emprestimo(self,hisLivro):
-        emprestimo = datetime.now()
-        self.historico.append({hisLivro, emprestimo})
-        
-
-
-
-   
-
-livro1 = Livros('Chapeu vermelho', 'Chico', 2500, 'Indisponivel') # OBJETO LIVRO
-livro2 = Livros('asd vermelho', 'asd', 250, 'Indisponivel') # OBJETO LIVRO
-livro3 = Livros('Chgrsapeu vermelho', 'gdf', 2400, 'Indisponivel') # OBJETO LIVRO
-livro4 = Livros('Chapegdfgdu vermelho', 'gfd', 2030, 'Indisponivel') # OBJETO LIVRO
-
-
-
-
-usuario1 = Usuarios('Matheus', 123)                              # OBJETO USUARIO
-usuario1.emprestimo(livro1)
-usuario1.emprestimo(livro2)
-usuario1.emprestimo(livro3)
-usuario1.emprestimo(livro4)
-usuario1.exibir()
-#print(usuario1.__dict__)
-
-
-
-
-"""
-class Livro:
-    def __init__(self, livro,usuariso, dataemprestimo = '', datadevolucao = ''):
-        self.livro = livro
-        self.dataemprestimo = dataemprestimo
-        self.datadevolucao = datadevolucao
-        self.usuario = Usuarios()
-
-    def emprestimo(self,):
-        emprestimo = datetime.now()
-        self.dataemprestimo = emprestimo
-        
-
-         
-    def devolucao():
+    def calcularImposto(self):
+        return self.valor * 0.02
+    
+    @abstractclassmethod #metodo abstrato
+    def aluguelsugerido(self): 
         ...
 
-    
-teste = Livro("Livro")
-teste.emprestimo()
-print(teste.__dict__)
 """
-#usuario1.devolverLivro('Chapeu vermelho')
+imovel = Imovel('Solar do Cerrado', 'DF', 500000)
+imovel.detalhar()
+imovel.endereco = 'ABC'
+imovel.area = '20000'
+"""
+
+class ImovelResidencial(Imovel):
+    def __init__(self, nome, uf, valor, endereco = '', area = ''):
+        super().__init__(nome, uf, valor, endereco = '', area = '')
+        self.quartos = 0
+        self.piscina = False
+        
+    def aluguelsugerido(self): 
+        return self.valor * 0.01    
+    
+class ImovelComercial(Imovel):
+    def aluguelsugerido(self): 
+        return self.valor * 0.015    
+    
 
 
+class ImovelRural():
+    def __init__(self, hectares = '', curral = '', produtiva = True):
+        self.hectares = hectares
+        self.curral = curral
+        self.produtiva = produtiva
+        
+    def mesPlantacao(self, mes):
+        match int(self, mes):
+            case 1: print('Milho')
+            case 2: print('Feijão')
+            case 3: print('Soja')
+            case other: print('Algodão')
+                
+class Fazeda(Imovel, ImovelRural):
+    def aluguelsugerido(self): 
+        return self.valor * 0.025    
+    
 
+"""
+fazenda = Fazeda('teste 1 ', 'per', 304598)
+fazenda.endereco = 'daskd'
+fazenda.area = 'dsappko'
+fazenda.detalhar()
+"""
+
+casa = ImovelResidencial('teste 1 ', 'per', 304598)
+casa.nome = "Casa muito  Bonita"
+"""
+casa.endereco = 'daskd'
+casa.area = 'dsappko'
+"""
+casa.detalhar()
+#print(casa.getNome())
