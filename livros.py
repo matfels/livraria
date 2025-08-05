@@ -27,7 +27,7 @@ class Livros:
 #classe Livros=======================================================================
 
 #classe Emprestimo==================================================================    
-class Emprestimo:
+class Emprestimos:
     def __init__(self, livro, data_emprestimo):
         self.livro = livro
         self.data_emprestimo = data_emprestimo
@@ -43,21 +43,21 @@ class Emprestimo:
         
 #Classe usuário=====================================================================
 class Usuarios:
-    def emprestimo(self,livro):
-        if livro.status == "Disponivel":
-            livro.statuss("Emprestado")
-            data_emprestimo = datetime.now()
-            novo_emprestimo = Emprestimo(livro, data_emprestimo)
-            self.historico.append(novo_emprestimo)
-            print(f"'{livro.titulo} emprestado para {self.nome}")
-        else:
-            print(f"O livro '{livro.titulo}' não está disponível para emprestimo.")
-            
     def __init__(self, nome, id, historico = None):
         self.nome = nome
         self.id = id
         self.historico = historico if historico is not None else []
 
+    def emprestimo(self,livro):
+        if livro.status == "Disponivel":
+            livro.statuss("Emprestado")
+            data_emprestimo = datetime.now()
+            novo_emprestimo = Emprestimos(livro, data_emprestimo)
+            self.historico.append(novo_emprestimo)
+            print(f"'{livro.titulo} emprestado para {self.nome}")
+        else:
+            print(f"O livro '{livro.titulo}' não está disponível para emprestimo.")
+            
     def devolverLivro(self,livro): #Melhoar, da para só adicionar a data de devolução do livro
         encontrado = False
         for emprestimo_obj in self.historico:
@@ -105,7 +105,7 @@ usuario1.emprestimo(livro4)
 
 
 # Devolução livro
-usuario1.devolverLivro(livro1)
+usuario1.devolverLivro(livro3)
 
 # Exibir histórico
 usuario1.exibir()
