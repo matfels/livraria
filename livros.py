@@ -1,104 +1,111 @@
-#Básicamente faz com que um objeto nao seja criado diretamente da classe mãe e sim das Heranças
-from abc import ABC, abstractclassmethod
+from datetime import datetime
+#classe Livros=======================================================================
+class Livros:
+    def __init__(self, titulo, autor, npagina, status = 'Disponível'):
+        self.titulo = titulo
+        self.autor = autor
+        self.npagina = npagina
+        self.status = status
 
-class Imovel(ABC):
-    def __init__(self, nome, uf, valor, endereco = '', area = ''):
-        self._nome = nome #1 anderline protegido, dois anderline atributos privados.
-        self.uf = uf
-        self.valor = valor
-        self.endereco = endereco
-        self.area = area
+    def verDisp(self):
+        match self.status:
+            case 'Disponivel':
+                print('Livro esta Disponivel')
+            case 'Indisponivel':
+                print('Livro esta Indisponivel')
+            case other:
+                print('Erro no status')     
 
+    def statuss(self, status1):
+        self.status = status1
 
-#=================== Encapsulamento no python =======================
+    def exibir(self):
+        print(f"Título: {self.titulo}")
+        print(f"Autor: {self.autor}")
+        print(f"Numero de páginas: {self.npagina}")
+        print(f"Status: {self.status}")
+#classe Livros=======================================================================
 
-    @property  
-    def nome(self): #get
-        return self._nome
+#classe Emprestimo==================================================================    
+class Emprestimo:
+    def __init__(self, livro, data_emprestimo):
+        self.livro = livro
+        self.data_emprestimo = data_emprestimo
+        self.data_devolucao = None
+        
+    def registrar_devolucao(self):
+        self.data_devolucao = datetime.now()
+        
+    def __str__(self):
+        status_devolucao = f"Devolvido em: {self.data_devolucao.strftime('%d/%m/%Y')}" if self.data_devolucao else 'Não devolvido'
+        return f"Livro: '{self.livro.titulo}' (Empréstimo: {self.data_emprestimo.strftime('%d/%m/%Y %H:%M')}, {status_devolucao})"
+#classe Emprestimo==================================================================
+        
+#Classe usuário=====================================================================
+class Usuarios:
+    def emprestimo(self,livro):
+        if livro.status == "Disponivel":
+            livro.statuss("Emprestado")
+            data_emprestimo = datetime.now()
+            novo_emprestimo = Emprestimo(livro, data_emprestimo)
+            self.historico.append(novo_emprestimo)
+            print(f"'{livro.titulo} emprestado para {self.nome}")
+        else:
+            print(f"O livro '{livro.titulo}' não está disponível para emprestimo.")
+            
+    def __init__(self, nome, id, historico = None):
+        self.nome = nome
+        self.id = id
+        self.historico = historico if historico is not None else []
 
-    @nome.setter #set -  Utiliza metodos como atributos
-    def nome(self, nome):
-        self._nome = nome
-    
-#=================== Encapsulamento no python =======================
-
-
-
-
-
-#==================== Forma convencional, utilizado nas outras liguagens ===============================
-#    def getNome(self):       #metodo para pegar o valor do nome
-#       return self.nome
-
-#    def setNome(self, nome):  #metodo para setar o nome
-#        self.nome = nome
-#==================== Forma convencional, utilizado nas outras liguagens ===============================
-
-
-
-    def detalhar(self):            
-        print(self.__dict__)
+    def devolverLivro(self,livro): #Melhoar, da para só adicionar a data de devolução do livro
+        encontrado = False
+        for emprestimo_obj in self.historico:
+            if emprestimo_obj.livro == livro and emprestimo_obj.data_devolucao is None:
+                emprestimo_obj.registrar_devolucao()
+                livro.statuss("Disponivel")
+                print(f"'{livro.titulo}' devolvido por {self.nome}")
+                encontrado = True
+                break
+        if not encontrado:
+            print(f"O livro '{livro.titulo} não foi encontrado como emprestado para {self.nome} ou já foi devolvido.")
+                     
+    def exibir(self):
+        cont = 0
+        print(f"Histórico de empréstimo de {self.nome} (ID: {self.id}): ")
+        if not self.historico:
+            print("Nenhum livro no historico.")
+        else:
+            for i, emprestimo_obj in enumerate(self.historico):
+                print(f"{i+1} - {emprestimo_obj}")
+#Classe usuário=====================================================================
         
     
-    def calcularImposto(self):
-        return self.valor * 0.02
-    
-    @abstractclassmethod #metodo abstrato
-    def aluguelsugerido(self): 
-        ...
-
-"""
-imovel = Imovel('Solar do Cerrado', 'DF', 500000)
-imovel.detalhar()
-imovel.endereco = 'ABC'
-imovel.area = '20000'
-"""
-
-class ImovelResidencial(Imovel):
-    def __init__(self, nome, uf, valor, endereco = '', area = ''):
-        super().__init__(nome, uf, valor, endereco = '', area = '')
-        self.quartos = 0
-        self.piscina = False
-        
-    def aluguelsugerido(self): 
-        return self.valor * 0.01    
-    
-class ImovelComercial(Imovel):
-    def aluguelsugerido(self): 
-        return self.valor * 0.015    
-    
+            
+            
 
 
-class ImovelRural():
-    def __init__(self, hectares = '', curral = '', produtiva = True):
-        self.hectares = hectares
-        self.curral = curral
-        self.produtiva = produtiva
-        
-    def mesPlantacao(self, mes):
-        match int(self, mes):
-            case 1: print('Milho')
-            case 2: print('Feijão')
-            case 3: print('Soja')
-            case other: print('Algodão')
-                
-class Fazeda(Imovel, ImovelRural):
-    def aluguelsugerido(self): 
-        return self.valor * 0.025    
-    
 
-"""
-fazenda = Fazeda('teste 1 ', 'per', 304598)
-fazenda.endereco = 'daskd'
-fazenda.area = 'dsappko'
-fazenda.detalhar()
-"""
+   
+# OBJETOS LIVROS
+livro1 = Livros('1 - livro', 'Chico', 2500, 'Disponivel') 
+livro2 = Livros('2 - livro', 'asd', 250, 'Disponivel') 
+livro3 = Livros('3 - livro', 'gdf', 2400, 'Disponivel') 
+livro4 = Livros('4 - livro', 'gfd', 2030, 'Disponivel') 
 
-casa = ImovelResidencial('teste 1 ', 'per', 304598)
-casa.nome = "Casa muito  Bonita"
-"""
-casa.endereco = 'daskd'
-casa.area = 'dsappko'
-"""
-casa.detalhar()
-#print(casa.getNome())
+
+# OBJETO USUARIO
+usuario1 = Usuarios('Matheus', 123)                              
+
+# Emprestimo livro
+usuario1.emprestimo(livro1)
+usuario1.emprestimo(livro2)
+#usuario1.emprestimo(livro3)
+usuario1.emprestimo(livro4)
+
+
+# Devolução livro
+usuario1.devolverLivro(livro1)
+
+# Exibir histórico
+usuario1.exibir()
